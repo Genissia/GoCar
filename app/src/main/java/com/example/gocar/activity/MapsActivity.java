@@ -8,8 +8,12 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.toolbox.StringRequest;
 import com.example.gocar.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -22,12 +26,20 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import static com.android.volley.VolleyLog.TAG;
+import static com.example.gocar.MainActivity.URL_CAR;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    Location currentLocation;
+    public Location currentLocation;
     FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
     private GoogleMap mMap;
+    double latTO;
+    double lonTO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +90,38 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
      */
+//    public double location(){
+//        StringRequest strReqi = new StringRequest(Request.Method.POST,
+//                URL_CAR, new Response.Listener<String>() {
+//
+//            @Override
+//            public void onResponse(String response) {
+//                Log.d(TAG, "Register Response: " + response.toString());
+//                //hideDialog();
+//                double radius = 6378137;   // approximate Earth radius, *in meters*
+//                try {
+//                    JSONObject jObj = new JSONObject(response);
+//
+//                    double latTO = jObj.getDouble("Latitude");
+//                    double lonTO = jObj.getDouble("Longitude");
+//
+//                }
+//                catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }});
+//                double fromLat = currentLocation.getLatitude();
+//                double fromLon = currentLocation.getLongitude();
+//                double deltaLat = latTO - fromLat;
+//                double deltaLon = lonTO - fromLon;
+//                double angle = 2 * Math.asin( Math.sqrt(
+//                        Math.pow(Math.sin(deltaLat/2), 2) +
+//                                Math.cos(fromLat) * Math.cos(latTO) *
+//                                        Math.pow(Math.sin(deltaLon/2), 2) ) );
+//
+//
+//        return radius * angle;
+//    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
         //mMap = googleMap;
@@ -85,14 +129,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Add a marker in Sydney and move the camera
         LatLng latLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("I'm Here");
+        //MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("I'm Here");
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 5 ));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 21 ));
+        googleMap.setMyLocationEnabled(true);
+        //googleMap.addMarker(markerOptions);
 
-        googleMap.addMarker(markerOptions);
 
-
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+  //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
     @Override

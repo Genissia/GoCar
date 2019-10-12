@@ -122,6 +122,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //
 //        return radius * angle;
 //    }
+    //hello
     @Override
     public void onMapReady(GoogleMap googleMap) {
         //mMap = googleMap;

@@ -68,7 +68,7 @@ public class MainActivity extends MapsActivity implements CarsAdapter.OnCarListe
     View.OnClickListener listener;
     //double lat;
     double lon;
-    public static String URL_CAR = "http://192.168.1.8/android_login_api/cars.php";
+    public static String URL_CAR = "http://192.168.43.221/android_login_api/cars.php";
     public Intent intent;
     public cars car;
     @Override
@@ -186,22 +186,14 @@ public class MainActivity extends MapsActivity implements CarsAdapter.OnCarListe
         Volley.newRequestQueue(this).add(stringRequest);
     }
     public void oncarclick(int position){
-       // String id = String.valueOf(carList.get(position).getModelName());
-        String name = carList.get(position).getModelName();
-        String year = String.valueOf(carList.get(position).getProductionYear());
+
         String latitude = String.valueOf(carList.get(position).getLatitude());
         String longitude = String.valueOf(carList.get(position).getLongitude());
-        Double latit = Double.parseDouble(latitude);
-        Double longit = Double.parseDouble(longitude);
-        String image = carList.get(position).getImage();
-        String fuel = String.valueOf(carList.get(position).getFuelLevel());
+        Double latidub = Double.parseDouble(latitude);
+        Double longdub = Double.parseDouble(longitude);
         Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-        intent.putExtra("name", name);
-        intent.putExtra("year", year);
-        intent.putExtra("latitude", latit);
-        intent.putExtra("longitude", longit);
-        intent.putExtra("image", image);
-        intent.putExtra("fuel", fuel);
+        intent.putExtra("latitude", latidub);
+        intent.putExtra("longitude", longdub);
         startActivity(intent);
         //finish();
     }

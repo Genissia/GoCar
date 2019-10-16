@@ -1,8 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="${relativePackage}.${activityClass}">
 
     <TextView
@@ -15,24 +15,25 @@
 
         />
 
-    <Button
-        android:id="@+id/map"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="40dip"
-        android:layout_marginBottom="135dp"
-        android:background="@color/btn_logut_bg"
-        android:text='YALLA BOOK'
-        android:textAllCaps="false"
-        android:textColor="@color/white"
-        android:textSize="15dp" />
+
+<!--    <Button-->
+<!--        android:id="@+id/map"-->
+<!--        android:layout_width="fill_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:layout_marginTop="40dip"-->
+<!--        android:layout_marginBottom="135dp"-->
+<!--        android:background="@color/btn_logut_bg"-->
+<!--        android:text='YALLA BOOK'-->
+<!--        android:textAllCaps="false"-->
+<!--        android:textColor="@color/white"-->
+<!--        android:textSize="15dp" />-->
 
     <Button
         android:id="@+id/btnLogout"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@id/map"
+        android:layout_alignBottom="@id/recyclerview"
         android:layout_marginTop="40dip"
         android:layout_marginBottom="-79dp"
         android:background="@color/btn_logut_bg"
@@ -41,12 +42,28 @@
         android:textColor="@color/white"
 
         android:textSize="15dp" />
+<!--    <Button-->
+<!--        android:id="@+id/btnLogout"-->
+<!--        android:layout_width="fill_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignBottom="@id/map"-->
+<!--        android:layout_marginTop="40dip"-->
+<!--        android:layout_marginBottom="-79dp"-->
+<!--        android:background="@color/btn_logut_bg"-->
+<!--        android:text="@string/btn_logout"-->
+<!--        android:textAllCaps="false"-->
+<!--        android:textColor="@color/white"-->
+
+<!--        android:textSize="15dp" />-->
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
         android:layout_height="526dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:clickable="true"
         />
+
 
 </RelativeLayout>

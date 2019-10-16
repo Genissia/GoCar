@@ -5,6 +5,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -15,6 +16,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.example.gocar.R;
+import com.example.gocar.helper.CarsAdapter;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -32,35 +34,32 @@ import org.json.JSONObject;
 import static com.android.volley.VolleyLog.TAG;
 import static com.example.gocar.MainActivity.URL_CAR;
 
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     public Location currentLocation;
-    FusedLocationProviderClient fusedLocationProviderClient;
+    public FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
     private GoogleMap mMap;
-    double latTO;
-    double lonTO;
-
+    Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps3);
-
-         //Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        //SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                //.findFragmentById(R.id.map);
-        //mapFragment.getMapAsync(this);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         fetchLastLocation();
 
+
+
+
+
     }
-    private void fetchLastLocation(){
+    public void fetchLastLocation(){
         if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) !=
         PackageManager.PERMISSION_GRANTED){
             ActivityCompat.requestPermissions(this,new String[]
             {Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_CODE);
             return;
-
         }
         Task<Location> task = fusedLocationProviderClient.getLastLocation();
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
@@ -80,63 +79,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-//    public double location(){
-//        StringRequest strReqi = new StringRequest(Request.Method.POST,
-//                URL_CAR, new Response.Listener<String>() {
-//
-//            @Override
-//            public void onResponse(String response) {
-//                Log.d(TAG, "Register Response: " + response.toString());
-//                //hideDialog();
-//                double radius = 6378137;   // approximate Earth radius, *in meters*
-//                try {
-//                    JSONObject jObj = new JSONObject(response);
-//
-//                    double latTO = jObj.getDouble("Latitude");
-//                    double lonTO = jObj.getDouble("Longitude");
-//
-//                }
-//                catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }});
-//                double fromLat = currentLocation.getLatitude();
-//                double fromLon = currentLocation.getLongitude();
-//                double deltaLat = latTO - fromLat;
-//                double deltaLon = lonTO - fromLon;
-//                double angle = 2 * Math.asin( Math.sqrt(
-//                        Math.pow(Math.sin(deltaLat/2), 2) +
-//                                Math.cos(fromLat) * Math.cos(latTO) *
-//                                        Math.pow(Math.sin(deltaLon/2), 2) ) );
-//
-//
-//        return radius * angle;
-//    }
-    //hello
     @Override
     public void onMapReady(GoogleMap googleMap) {
         //mMap = googleMap;
 
 
         // Add a marker in Sydney and move the camera
-        LatLng latLng = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
-        //MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("I'm Here");
+        intent = getIntent();
+         final double lat = intent.getDoubleExtra("latitude",0);
+         final double lon = intent.getDoubleExtra("longitude",0);
+
+        LatLng latLng = new LatLng(lat,lon);
+       // LatLng me = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
+        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("Car");
+        googleMap.addMarker(markerOptions);
+        //googleMap.addMarker(new MarkerOptions().position(me).title(("I'm here")));
         googleMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
         googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 21 ));
         googleMap.setMyLocationEnabled(true);
-        //googleMap.addMarker(markerOptions);
-
-
   //        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 
@@ -150,5 +110,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 break;
         }
+    }
+
+    public Location getCurrentLocation() {
+        return currentLocation;
     }
 }

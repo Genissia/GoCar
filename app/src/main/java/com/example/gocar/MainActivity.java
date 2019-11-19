@@ -7,68 +7,53 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.gocar.activity.LoginActivity;
 import com.example.gocar.activity.MapsActivity;
+import com.example.gocar.activity.RegisterActivity;
+import com.google.android.gms.maps.GoogleMap;
 import com.example.gocar.helper.CarsAdapter;
+import com.example.gocar.activity.Details;
 import com.example.gocar.helper.SessionManager;
 import com.example.gocar.helper.SQLiteHandler;
 import com.example.gocar.helper.cars;
-import com.google.android.gms.maps.GoogleMap;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModel;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import butterknife.OnClick;
-
-import static com.android.volley.VolleyLog.TAG;
 
 public class MainActivity extends MapsActivity implements CarsAdapter.OnCarListener{
 
     private TextView txtName;
     private TextView txtEmail;
-    private Button btnLogout;
     GoogleMap googleMap;
+    private static final int REQUEST_CODE = 101;
+    private Button btnLogout;
     private SQLiteHandler db;
     private SessionManager session;
-    private static final int REQUEST_CODE = 101;
     double deltaLat;
     double deltaLon;
+    public static int Carid;
+    public static String userid;
+    public static String Modelname;
+    View.OnClickListener listener;
+    double lon;
     //a list to store all the products
     List<cars> carList;
     //the recyclerview
     RecyclerView recyclerView;
     CarsAdapter adapter;
-
     public double dist;
-    View.OnClickListener listener;
     //double lat;
-    double lon;
-    public static String URL_CAR = "http://192.168.43.221/android_login_api/cars.php";
+    public static String URL_CAR = "http://192.168.1.6/android_login_api/cars.php";
+    public static double lat;
+    public static double longi;
     public Intent intent;
     public cars car;
     @Override
@@ -78,7 +63,6 @@ public class MainActivity extends MapsActivity implements CarsAdapter.OnCarListe
         txtName =  findViewById(R.id.name);
         txtEmail =  findViewById(R.id.email);
         btnLogout = findViewById(R.id.btnLogout);
-        //btnmaps =  findViewById(R.id.map);
         //getting the recyclerview from xml
         recyclerView = findViewById(R.id.recyclerview);
         LinearLayoutManager manager = new LinearLayoutManager(this);
@@ -91,7 +75,6 @@ public class MainActivity extends MapsActivity implements CarsAdapter.OnCarListe
         loadProducts();
         //initializing the carlist
 
-        // SqLite database handler
         db = new SQLiteHandler(getApplicationContext());
         // session manager
         session = new SessionManager(getApplicationContext());
@@ -141,6 +124,7 @@ public class MainActivity extends MapsActivity implements CarsAdapter.OnCarListe
                                 double c = 2 * Math.atan2(Math.sqrt(angle), Math.sqrt(1 - angle));
                                 dist = radius * c;
                                 carList.add(new cars(
+                                        product.getInt("uniqueid"),
                                         product.getString("Model_Name"),
                                         product.getInt("ProductionYear"),
                                         product.getDouble("Latitude"),
@@ -189,18 +173,28 @@ public class MainActivity extends MapsActivity implements CarsAdapter.OnCarListe
 
         String latitude = String.valueOf(carList.get(position).getLatitude());
         String longitude = String.valueOf(carList.get(position).getLongitude());
-        Double latidub = Double.parseDouble(latitude);
-        Double longdub = Double.parseDouble(longitude);
-        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
-        intent.putExtra("latitude", latidub);
-        intent.putExtra("longitude", longdub);
+        Carid = carList.get(position).getuniqueid();
+        Modelname = carList.get(position).getModelName();
+        userid = LoginActivity.uid;
+       // int caridsend = Integer.parseInt(carid);
+        lat = Double.parseDouble(latitude);
+        longi = Double.parseDouble(longitude);
+        Intent intent = new Intent(MainActivity.this, Details.class);
         startActivity(intent);
-        //finish();
+      //  Intent j = new Intent(MainActivity.this, MapsActivity.class);
+       // j.setFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+      //  intent.putExtra("lat", latidub);
+       // intent.putExtra("long", longdub);
+        //startActivity(j);
+
+      //  intent.putExtra("carid", caridsend);
+
+
     }
 
 
     private void logoutUser() {
-        session.setLogin(false);
+        session.setLogin(userid,false);
 
         db.deleteUsers();
 

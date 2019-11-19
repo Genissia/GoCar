@@ -28,6 +28,8 @@ import com.example.gocar.app.AppController;
 import com.example.gocar.helper.SQLiteHandler;
 import com.example.gocar.helper.SessionManager;
 
+import static com.example.gocar.MainActivity.userid;
+
 public class LoginActivity extends Activity {
     private static final String TAG = RegisterActivity.class.getSimpleName();
     private Button btnLogin;
@@ -37,16 +39,19 @@ public class LoginActivity extends Activity {
     private ProgressDialog pDialog;
     private SessionManager session;
     private SQLiteHandler db;
+    public static String uid;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        // Session manager
+        session = new SessionManager(getApplicationContext());
         inputEmail = findViewById(R.id.email);
         inputPassword =  findViewById(R.id.password);
         btnLogin =  findViewById(R.id.btnLogin);
         btnLinkToRegister =  findViewById(R.id.btnLinkToRegisterScreen);
+        //session = new SessionManager(getApplicationContext());
 
         // Progress dialog
         pDialog = new ProgressDialog(this);
@@ -55,8 +60,7 @@ public class LoginActivity extends Activity {
         // SQLite database handler
         db = new SQLiteHandler(getApplicationContext());
 
-        // Session manager
-        session = new SessionManager(getApplicationContext());
+
 
         // Check if user is already logged in or not
         if (session.isLoggedIn()) {
@@ -126,11 +130,9 @@ public class LoginActivity extends Activity {
                     if (!error) {
                         // user successfully logged in
                         // Create login session
-                        session.setLogin(true);
-
                         // Now store the user in SQLite
-                        String uid = jObj.getString("uid");
-
+                        uid = jObj.getString("uid");
+                        session.setLogin(uid, true);
                         JSONObject user = jObj.getJSONObject("user");
                         String name = user.getString("name");
                         String email = user.getString("email");

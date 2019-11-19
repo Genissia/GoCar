@@ -43,7 +43,7 @@ public class CarsAdapter extends RecyclerView.Adapter<CarsAdapter.ProductViewHol
         holder.textViewdist.setText(String.valueOf(product.getdist()));
         holder.textViewFuelLevel.setText(String.valueOf(product.getFuelLevel()));
 //        holder.textViewLatitude.setText(String.valueOf(product.getLatitude()));
-        Picasso.get().load("http://192.168.43.221/" + product.getImage()).into(holder.imageView);
+        Picasso.get().load("http://192.168.1.6/" + product.getImage()).into(holder.imageView);
         Log.i("nadine",product.getImage());
 
     }

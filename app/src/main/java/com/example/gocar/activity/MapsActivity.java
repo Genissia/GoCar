@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
+import com.example.gocar.MainActivity;
 import com.example.gocar.R;
 import com.example.gocar.helper.CarsAdapter;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -41,7 +42,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public FusedLocationProviderClient fusedLocationProviderClient;
     private static final int REQUEST_CODE = 101;
     private GoogleMap mMap;
-    Intent intent;
+    Intent intenti;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,9 +86,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
         // Add a marker in Sydney and move the camera
-        intent = getIntent();
-         final double lat = intent.getDoubleExtra("latitude",0);
-         final double lon = intent.getDoubleExtra("longitude",0);
+        intenti = getIntent();
+         final double lat = MainActivity.lat;
+         final double lon = MainActivity.longi;
 
         LatLng latLng = new LatLng(lat,lon);
        // LatLng me = new LatLng(currentLocation.getLatitude(),currentLocation.getLongitude());
